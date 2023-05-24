@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Produto Detalhado</h2>
+    <a href="{% url 'produtos:todos_produtos' %}">Voltar para todos os produtos</a>
+
+    <form action="{% url 'produtos:editar_produto' produto.id %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend><h1>Editar</h1></legend>
+            <div>
+                <label for="id">Id</label>
+                <input type="text" name="id" id="id" value="{{ produto.id }}" disabled>
+            </div>
+
+            <div>
+                <label for="descricao">Descrição</label>
+                <input type="text" name="descricao" id="descricao" value="{{ produto.descricao }}">
+            </div>
+
+            <div>
+                <label for="referencia_fornecedor">Referencia</label>
+                <input type="text" name="referencia_fornecedor" id="referencia_fornecedor" value="{{ produto.referencia_fornecedor }}">
+            </div>
+
+            <div>
+                <label for="marca">Fornecedor</label>
+                <input type="text" name="fornecedor" id="fornecedor" value="{{ produto.fornecedor }}">
+            </div>
+
+            <div>
+                <label for="preco_custo">Preco Custo</label>
+                <input type="number" name="preco_custo" id="preco_custo" value="{{ produto.preco_custo }}" step="0.01">
+            </div>
+
+            <div>
+                <label for="preco_venda">Preco Venda</label>
+                <input type="number" name="preco_venda" id="preco_venda" value="{{ produto.preco_venda }}" step="0.01">
+            </div>
+
+            <div>
+                <label for="ncm">NCM</label>
+                <input type="text" name="ncm" id="ncm" value="{{ produto.ncm }}">
+            </div>
+
+            <div>
+                <label for="data_compra">Data Compra</label>
+                <!-- A data nao esta ficando com o valor correto, tem que ajustar isso mais pra frente -->
+                <input type="date" name="data_compra" id="data_compra" value="{{ produto.data_compra }}" required>
+            </div>
+
+            <div>
+                <label for="ultima_modificacao">Ultima Modificação</label>
+                <!-- A data nao esta ficando com o valor correto, tem que ajustar isso mais pra frente -->
+                <!-- Esta disabled porque a data sera modificada automaticamente quando salvar -->
+                <input type="date" name="ultima_modificacao" id="ultima_modificacao" value="{{ produto.ultima_modificacao }}" disabled>
+            </div>
+            <input type="submit" value="Editar">
+        </fieldset>
+    </form>
+</body>
+</html>

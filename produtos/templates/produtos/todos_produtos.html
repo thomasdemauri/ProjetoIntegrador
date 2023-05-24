@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Lista de Produtos</h2>
+    <a href="{% url 'produtos:index' %}">Voltar para página inicial</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Referencia</th>
+                <th>Marca</th>
+                <th>Fornecedor</th>
+                <th>Preco custo</th>
+                <th>Preco Venda</th>
+                <th>Ncm</th>
+                <th>Data Compra</th>
+                <th>Última Modificacao</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produto in todos_produtos %}
+                <tr>
+                    <td> {{ produto.id }} </td>
+                    <td> {{ produto.descricao }} </td>
+                    <td> {{ produto.referencia_fornecedor }} </td>
+                    <td> {{ produto.marca }} </td>
+                    <td> {{ produto.fornecedor }} </td>
+                    <td> {{ produto.preco_custo }} </td>
+                    <td> {{ produto.preco_venda }} </td>
+                    <td> {{ produto.ncm }} </td>
+                    <td> {{ produto.data_compra }} </td>
+                    <td> {{ produto.ultima_modificacao }} </td>
+                    <!-- Envia o id do produto atual na funcao produto_detalhado  -->
+                    <td> <a href="{% url 'produtos:produto_detalhado' produto.id %} ">Detalhar</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
