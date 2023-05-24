@@ -30,7 +30,7 @@ class Produto(models.Model):
     marca = models.ForeignKey(Marca, on_delete=models.CASCADE, default="")
     fornecedor = models.ForeignKey(Fornecedor, on_delete=models.CASCADE, default="")
     preco_custo = models.DecimalField(max_digits=10, decimal_places=2)
-    preco_venda = models.DecimalField(max_digits=5, decimal_places=2)
+    preco_venda = models.DecimalField(max_digits=10, decimal_places=2)
     data_compra = models.DateField()
     ultima_modificacao = models.DateField(auto_now=True) # Adiciona a data no momento da execucao do comando save()
     ncm = models.CharField(max_length=8)
@@ -38,3 +38,10 @@ class Produto(models.Model):
     def __str__(self) -> str:
         return self.descricao + " | " + self.referencia_fornecedor
 
+
+    def formata_data_compra(self):
+        return self.data_compra.strftime('%Y-%m-%d')
+
+
+    def formata_ultima_modificacao(self):
+        return self.ultima_modificacao.strftime('%Y-%m-%d')

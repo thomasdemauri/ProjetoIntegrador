@@ -22,6 +22,7 @@ def todos_produtos(requisicao):
         raise Http404("Erro ")
     return render(requisicao, "produtos/todos_produtos.html", contexto)
 
+
 # Essa requisicao trata de capturar do banco de dados o ID igual a chave primaria (id) de produto e 
 # se existir um, é retornado tal produto para o template atraves do dicionario 'contexto'
 def produto_detalhado(requisicao, id_produto):
@@ -34,16 +35,16 @@ def produto_detalhado(requisicao, id_produto):
     return render(requisicao, "produtos/produto_detalhado.html", contexto)
 
 
+# Essa requisicao trata de captura atraves do metodo POST os valores obtidos no formulario
+# e atualizar o registro no banco de dados. Apos isso ele redireciona para o a view 'produto_detalhado'
 def editar_produto(requisicao, id_produto):
     try:
         produto = Produto.objects.get(pk=id_produto)
 
         produto.descricao = requisicao.POST["descricao"]
         produto.referencia_fornecedor = requisicao.POST["referencia_fornecedor"]
-        # Nao da pra fazer o mesmo com marca, uma vez que a mesma e chave estrangeira
-        # Pensar depois em como alterar
-        # Nao da pra fazer o mesmo com fornecedor, uma vez que o mesmo e chave estrangeira
-        # Pensar depois em como alterar
+        produto.marca = Marca.objects.get(nome=requisicao.POST["marca"])
+        produto.fornecedor = Fornecedor.objects.get(razao_social=requisicao.POST["fornecedor"])
         produto.preco_custo = requisicao.POST["preco_custo"]
         produto.preco_venda = requisicao.POST["preco_venda"]
         produto.data_compra = requisicao.POST["data_compra"]
@@ -56,6 +57,12 @@ def editar_produto(requisicao, id_produto):
 
     
 
+def excluir_produto(requisicao, id_produto):
+    try:
+        Produto.objects.get(pk=id_produto).delete()
+    except Produto.DoesNotExist:
+        raise Http404("Erro ao tentar excluir o produto")
+    return HttpResponseRedirect(reverse("produtos:todos_produtos"))
 
 
 #################### Fornecedor ################
