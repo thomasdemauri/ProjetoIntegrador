@@ -45,3 +45,5 @@ class Produto(models.Model):
 
     def formata_ultima_modificacao(self):
         return self.ultima_modificacao.strftime('%Y-%m-%d')
+    
+

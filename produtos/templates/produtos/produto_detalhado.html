@@ -71,6 +71,9 @@
                     <input type="date" name="ultima_modificacao" id="ultima_modificacao" value="{{ produto.formata_ultima_modificacao }}" disabled>
                 </div>
                 <input type="submit" class="btn btn-primary" value="Editar">
+                <button type="button" class="btn btn-danger">
+                    <a class="link-light text-decoration-none" href="{% url 'produtos:excluir_produto' produto.id %}">Excluir</a>
+                </button>
             </fieldset>
         </form>
         <p>{{ produto.formata_data }}</p>
