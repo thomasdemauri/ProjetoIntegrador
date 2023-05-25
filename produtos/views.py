@@ -28,8 +28,18 @@ def todos_produtos(requisicao):
 def produto_detalhado(requisicao, id_produto):
     try:
         produto = Produto.objects.get(pk=id_produto)
-        contexto = { "produto" : produto }
-        print(produto.data_compra)
+        fornecedores = Fornecedor.objects.all()
+        marcas = Marca.objects.all()
+
+        # A redundancia em atual_fornecedor e na hora de verificar se tem igual so funciona comparando string com string
+        contexto = { 
+            "produto" : produto, 
+            "fornecedores" : fornecedores, 
+            "atual_fornecedor" : str(produto.fornecedor), 
+            "marcas" : marcas,
+            "atual_marca" : str(produto.marca),
+        }
+
     except Produto.DoesNotExist:
         raise Http404("Erro ao tentar detalhar um produto")
     return render(requisicao, "produtos/produto_detalhado.html", contexto)

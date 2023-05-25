@@ -33,18 +33,32 @@
                 <div class="mb-3">
                     <label for="referencia_fornecedor">Referencia</label>
                     <input type="text" name="referencia_fornecedor" id="referencia_fornecedor" value="{{ produto.referencia_fornecedor }}">
-                </div class="mb-3">
+                </div>
 
-                <div class="mb-3">
-                    <label for="fornecedor">Fornecedor</label>
-                    <input type="text" name="fornecedor" id="fornecedor" value="{{ produto.fornecedor }}">
-                </div class="mb-3">
+                <div class="w-25 mb-3">
+                    <label for="fornecedor">Fornecedor</label>  
+                    <select class="form-select" aria-label="Padrao fornecedor" id="fornecedor" name="fornecedor">
+                        <option value="{{ produto.fornecedor }}" /selected>{{ produto.fornecedor }}</option>
+                        {% for fornecedor in fornecedores %}
+                                {% if atual_fornecedor != fornecedor.razao_social %}
+                                    <option value="{{ fornecedor.razao_social }}">{{ fornecedor.razao_social }}</option>
+                                {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
 
-                <div class="mb-3">
+                <div class="w-25 mb-3">
                     <label for="marca">Marca</label>
-                    <input type="text" name="marca" id="marca" value="{{ produto.marca }}">
-                </div class="mb-3">
-
+                    <select class="form-select" aria-label="Padrao marca" id="marca" name="marca">
+                        <option value="{{ produto.marca }}" /selected>{{ produto.marca }}</option>
+                        {% for marca in marcas %}
+                            {% if atual_marca != marca.nome %}
+                                <option value="{{ marca.nome }}">{{ marca.nome }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                
                 <div class="mb-3">
                     <label for="preco_custo">Preco Custo</label>
                     <input type="number" name="preco_custo" id="preco_custo" value="{{ produto.preco_custo }}" step="0.01">
@@ -70,13 +84,14 @@
                     <!-- Esta disabled porque a data sera modificada automaticamente quando salvar -->
                     <input type="date" name="ultima_modificacao" id="ultima_modificacao" value="{{ produto.formata_ultima_modificacao }}" disabled>
                 </div>
+
                 <input type="submit" class="btn btn-primary" value="Editar">
+
                 <button type="button" class="btn btn-danger">
                     <a class="link-light text-decoration-none" href="{% url 'produtos:excluir_produto' produto.id %}">Excluir</a>
                 </button>
             </fieldset>
         </form>
-        <p>{{ produto.formata_data }}</p>
     </main>
 </body>
 </html>
