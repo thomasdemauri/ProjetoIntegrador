@@ -12,11 +12,55 @@ def index(requisicao):
     return render(requisicao, "produtos/index.html")
 
 
+# Essa requisicao apenas obtem forncedores e marcas do bd, renderiza o formulario
+# Assim que o formulario e submetido envia para funcao que salva de fato o novo produto no bd
+def incluir_produto(requisicao):
+    try:
+        fornecedores = Fornecedor.objects.all()
+        marcas = Marca.objects.all()
+
+        # A redundancia em atual_fornecedor e atual_marca e devida a hora de verificar e igual, so funciona comparando string com string
+        contexto = { 
+            "fornecedores" : fornecedores, 
+            "marcas" : marcas,
+        }
+    except Produto.DoesNotExist:
+        raise Http404("Erro ao tentar detalhar um produto")
+    except Marca.DoesNotExist:
+        raise Http404("Erro ao tentar detalhar um produto")
+    return render(requisicao, "produtos/incluir_produto.html", contexto)
+
+
+# Essa funcao apenas obtem os dados do formulario e cria de fato um novo produto
+# Redirecionando para todos_produtos
+def salva_produto_bd(requisicao):
+    descricao = requisicao.POST["descricao"]
+    referencia_fornecedor = requisicao.POST["referencia_fornecedor"]
+    marca = Marca.objects.get(nome=requisicao.POST["marca"])
+    fornecedor = Fornecedor.objects.get(razao_social=requisicao.POST["fornecedor"])
+    preco_custo = requisicao.POST["preco_custo"]
+    preco_venda = requisicao.POST["preco_venda"]
+    data_compra = requisicao.POST["data_compra"]
+    ncm = requisicao.POST["ncm"]
+    novo_produto = Produto.objects.create(descricao=descricao,
+                                          referencia_fornecedor=referencia_fornecedor,
+                                          marca=marca,
+                                          fornecedor=fornecedor,
+                                          preco_custo=preco_custo,
+                                          preco_venda=preco_venda,
+                                          data_compra=data_compra,
+                                          ncm=ncm
+                                        )
+    novo_produto.save()
+    return HttpResponseRedirect(reverse("produtos:todos_produtos"))
+
+
+
 # Essa requisicao trata de capturar do banco de dados todos os produtos e 
 # retornar isso para o template atraves do dicionario 'contexto'
 def todos_produtos(requisicao):
     try:
-        todos_produtos =  Produto.objects.all()
+        todos_produtos =  Produto.objects.order_by("-id").all()
         contexto = { "todos_produtos" : todos_produtos }
     except Produto.DoesNotExist:
         raise Http404("Erro ")
@@ -31,7 +75,7 @@ def produto_detalhado(requisicao, id_produto):
         fornecedores = Fornecedor.objects.all()
         marcas = Marca.objects.all()
 
-        # A redundancia em atual_fornecedor e na hora de verificar se tem igual so funciona comparando string com string
+        # A redundancia em atual_fornecedor e atual_marca e devida a hora de verificar e igual, so funciona comparando string com string
         contexto = { 
             "produto" : produto, 
             "fornecedores" : fornecedores, 
@@ -66,7 +110,7 @@ def editar_produto(requisicao, id_produto):
     return HttpResponseRedirect(reverse("produtos:todos_produtos"))
 
     
-
+# Essa requisicao exclui o produto e redireciona para o view todos_produtos
 def excluir_produto(requisicao, id_produto):
     try:
         Produto.objects.get(pk=id_produto).delete()
